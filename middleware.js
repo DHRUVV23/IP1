@@ -5,16 +5,17 @@ const {listingSchema,reviewSchema,}=require('./schema.js');
 
 module.exports.isLoggedIn =(req,res,next)=>{
 
-if(!req.isAuthenticated()){
+if(!req.isAuthenticated()){   //to check if a user is logged in before doing any specifc thing
   req.session.redirectUrl=req.originalUrl;
   // console.log(req.session.redirectUrl);
-    req.flash("success","you must be logged in to create Listing");
-    return res.redirect("/login");
+    req.flash("error","you must be logged in to create Listing");
+    return res.redirect("/login");   
   }
   next();
 }  
 
-module.exports.saveRedirectUrl=(req,res,next)=>{
+module.exports.saveRedirectUrl=(req,res,next)=>{  //since is.authorization clear all session objection so
+  //to save original url we save res.locals 
   // console.log(req.session.redirectUrl);
   if(req.session.redirectUrl){
     res.locals.redirectUrl=res.session.redirectUrl;
@@ -22,7 +23,7 @@ module.exports.saveRedirectUrl=(req,res,next)=>{
   next();
 };
 
-module.exports.isOwner= async (req,res,next)=>{
+module.exports.isOwner= async (req,res,next)=>{  //to check if a current user is owner of listing
   let { id } = req.params;
   let listing=await Listing.findById(id);
   if(!listing.owner.equals(res.locals.currUser._id)){
@@ -32,7 +33,7 @@ module.exports.isOwner= async (req,res,next)=>{
   next();
 };
 
-module.exports.validateListing=(req,res,next)=>{
+module.exports.validateListing=(req,res,next)=>{   //to validate lisitng using listing schema(server side error handling)
   let {error}=  listingSchema.validate(req.body);
   if(error){
    
@@ -42,7 +43,7 @@ module.exports.validateListing=(req,res,next)=>{
   }
 };
 
-module.exports.validatereview=(req,res,next)=>{
+module.exports.validatereview=(req,res,next)=>{   //to validate review using review schema(server side error handling)
   let {error}=  reviewSchema.validate(req.body);
   if(error){
    

@@ -23,8 +23,6 @@ const LocalStrategy=require("passport-local");
 const User= require("./models/user.js");
 
 
-
-
 const listingRouter=require("./routes/listing.js");
 const reviewRouter=require("./routes/review.js");
 const userRouter=require("./routes/user.js");
@@ -46,7 +44,7 @@ async function main() {
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true }));  
 app.use(methodOverride("_method"));
 app.engine('ejs',ejsMate);
 app.use(express.static(path.join(__dirname,"/public")));
@@ -73,7 +71,7 @@ const sessionOptions={
   cookie:{
     expires:Date.now()+ 604800000, //7day
     maxAge:604800000,
-    httpOnly:true,
+    httpOnly:true, //used to prevent cross scripting attacks for security issues
   },
 };
 
@@ -100,7 +98,9 @@ app.use(cookieParser());
 
 app.use((req,res,next)=>{
   res.locals.success=req.flash("success");
-  res.locals.currUser=req.user;
+  res.locals.error=req.flash("error");
+  res.locals.currUser=req.user;  // This middleware is called on every request
+  //  to ensure these local variables are available in all rendered templates.
   next();
 });
 

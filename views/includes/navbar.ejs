@@ -1,61 +1,100 @@
 
-<style>
-  .search-btn {
-    background-color: #fe424d;
-    color: white;
-    border-radius: 25px;
-    padding: 0 1rem 0 1rem;
-    
-  }
+  <style>
+    .navbar {
+      background-color: #f8f9fa;
+    }
 
-  .search-inp {
-    border-radius: 25px;
-    padding: 0.5rem 3rem 0.5rem 3rem;
-  }
+    .navbar-brand {
+      color: #ff5a5f;
+      font-size: 1.5rem;
+    }
 
-</style>
+    .navbar-brand:hover {
+      color: #ff7a7f;
+    }
+
+    .nav-link {
+      color: #555;
+      margin-right: 1rem;
+    }
+
+    .nav-link:hover {
+      color: #ff5a5f;
+    }
+
+    .search-btn {
+      background-color: #ff5a5f;
+      color: white;
+      border-radius: 25px;
+      padding: 0 1rem;
+      border: none;
+    }
+
+    .search-btn:hover {
+      background-color: #ff7a7f;
+    }
+
+    .search-inp {
+      border-radius: 25px;
+      padding: 0.5rem 1.5rem;
+      border: 1px solid #ddd;
+    }
+
+    .search-inp:focus {
+      border-color: #ff5a5f;
+      box-shadow: 0 0 0 0.2rem rgba(255, 90, 95, 0.25);
+    }
+
+    .navbar-toggler {
+      border: none;
+    }
+
+    .navbar-toggler-icon {
+      color: #ff5a5f;
+    }
+  </style>
 
 
-
-
-<nav class="navbar navbar-expand-md bg-body-light border-bottom sticky-top">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="/listings"><i class="fa-solid fa-globe" class="fa-compass"></i></a>
-      <button 
+<nav class="navbar navbar-expand-md sticky-top border-bottom">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/listings"><i class="fa-solid fa-globe"></i> TravelSite</a>
+    <button 
       class="navbar-toggler" 
       type="button" 
-      data-bs-toggle="collapse"
-       data-bs-target="#navbarNavAltMarkup">
+      data-bs-toggle="collapse" 
+      data-bs-target="#navbarNavAltMarkup"
+      aria-controls="navbarNavAltMarkup" 
+      aria-expanded="false" 
+      aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"><i class="fas fa-bars"></i></span>
+    </button>
 
-        <span class="navbar-toggler-icon"></span>
-      </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav">
+        <a class="nav-link" href="/listings">Explore</a>
+        <a class="nav-link" href="/listings/new">Add new Listing</a>
+      </div>
 
-      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-        <div class="navbar-nav">
-      
-          <a class="nav-link" href="/listings">Explore</a>
+      <div class="navbar-nav ms-auto">
+        <form class="d-flex" role="search">
+          <input class="form-control me-2 search-inp" type="search" placeholder="Search Destinations">
+          <button class="btn search-btn" type="submit">Search</button>
+        </form>
+      </div> 
 
-       
-        </div>
-
-        <div class="navbar-nav ms-auto">
-          <form class="d-flex" role="search">
-            <input class="form-control me-3 search-inp" type="search" 
-                   placeholder="Search Destinations">
-            <button class=" search-btn" type="submit">Search</button>
-          </form>
-        </div> 
-
-        <div class="navbar-nav ms-auto">
-          <a class="nav-link" href="/listings/new">Add new Listing</a>
-          <% if(!currUser) { %>
-          <a class="nav-link" href="/signup"> <b>Sign up</b> </a>
-          <a class="nav-link" href="/login"> <b> Log In</b> </a>
-          <% } %>
-          <% if(currUser) { %>
+      <div class="navbar-nav ms-auto">
+        <% if(!currUser) { %>
+          <a class="nav-link" href="/signup"><b>Sign up</b></a>
+          <a class="nav-link" href="/login"><b>Log In</b></a>
+        <% } %>
+        <% if(currUser) { %>
           <a class="nav-link" href="/logout">Log Out</a>
-          <% } %>
-        </div>
+        <% } %>
       </div>
     </div>
-  </nav>
+  </div>
+</nav>
+
+
+
+

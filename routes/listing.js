@@ -6,7 +6,7 @@ const {isLoggedIn ,isOwner , validateListing}=require("../middleware.js");
 
 const multer =require("multer");
 const {storage}=require('../cloudConfig.js');
-const upload=multer({storage});
+const upload=multer({storage});//it will store photos in cloudinary storage
 
 
 
@@ -18,7 +18,7 @@ router.get("/", wrapAsync(async (req, res) => {
   
   //New Route
   router.get("/new", isLoggedIn, (req, res) => {
-
+   
     res.render("listings/new.ejs");
   });
   
@@ -26,7 +26,10 @@ router.get("/", wrapAsync(async (req, res) => {
   router.get("/:id", wrapAsync(async (req, res) => {
     let { id } = req.params;
     const listing = await Listing.findById(id).populate({path:"reviews",populate:{path:"author"},}).populate("owner");
-    // console.log(listing);
+    if(!listing){
+      req.flash("error","Listing does not exist");
+      res.redirect("/listings");
+    }
     res.render("listings/show.ejs", { listing });
   })
   );
@@ -36,11 +39,12 @@ router.get("/", wrapAsync(async (req, res) => {
   upload.single("listing[image]"),
   validateListing,
    wrapAsync(async (req, res ,next) => {
+    
     let url =req.file.path;
     let filename =req.file.filename;
     // console.log(url,"..",filename);
     const newListing = new Listing(req.body.listing);
-    console.log(req.body.listing);
+    // console.log(req.body.listing);
     newListing.owner=req.user._id;
     newListing.image = {url , filename};
     await newListing.save();
@@ -54,6 +58,10 @@ router.get("/", wrapAsync(async (req, res) => {
   router.get("/:id/edit",isLoggedIn,isOwner, wrapAsync(async (req, res) => {
     let { id } = req.params;
     const listing = await Listing.findById(id);
+    if(!listing){
+      req.flash("error","Listing does not exist");
+      res.redirect("/listings");
+    }
     res.render("listings/edit.ejs", { listing });
   }));
   
